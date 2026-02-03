@@ -4,6 +4,7 @@ const state = {
   mode: "recall",
   questions: 18,
   flashDelay: 6,
+  timeLimit: 8,
   autoHint: true,
   queue: [],
   index: 0,
@@ -14,6 +15,8 @@ const state = {
   perTable: {},
   hintTimer: null,
   flashTimer: null,
+  questionTimer: null,
+  toastTimer: null,
 };
 
 const storageKey = "memox9_progress_v1";
@@ -30,6 +33,8 @@ const elements = {
   questionCountValue: document.getElementById("question-count-value"),
   flashDelay: document.getElementById("flash-delay"),
   flashDelayValue: document.getElementById("flash-delay-value"),
+  timeLimit: document.getElementById("time-limit"),
+  timeLimitValue: document.getElementById("time-limit-value"),
   autoHint: document.getElementById("auto-hint"),
   sessionMeta: document.getElementById("session-meta"),
   progressLabel: document.getElementById("progress-label"),
@@ -50,6 +55,7 @@ const elements = {
   masteryGlobal: document.getElementById("mastery-global"),
   streak: document.getElementById("streak"),
   accuracy: document.getElementById("accuracy"),
+  toast: document.getElementById("toast"),
 };
 
 function initProgress() {
@@ -138,6 +144,7 @@ function selectTables(set) {
 function updateRangeDisplay() {
   elements.questionCountValue.textContent = state.questions;
   elements.flashDelayValue.textContent = state.flashDelay;
+  elements.timeLimitValue.textContent = state.timeLimit;
 }
 
 function weightedTablePick() {
@@ -198,6 +205,10 @@ function clearTimers() {
     clearTimeout(state.flashTimer);
     state.flashTimer = null;
   }
+  if (state.questionTimer) {
+    clearTimeout(state.questionTimer);
+    state.questionTimer = null;
+  }
 }
 
 function startHintTimer() {
@@ -226,6 +237,32 @@ function startFlashTimer() {
   }, state.flashDelay * 1000);
 }
 
+function startQuestionTimer() {
+  clearTimeout(state.questionTimer);
+  elements.timer.classList.add("active");
+  elements.timerBar.style.transition = "none";
+  elements.timerBar.style.width = "0%";
+  requestAnimationFrame(() => {
+    elements.timerBar.style.transition = `width ${state.timeLimit}s linear`;
+    elements.timerBar.style.width = "100%";
+  });
+  state.questionTimer = setTimeout(() => {
+    handleTimeOut();
+  }, state.timeLimit * 1000);
+}
+
+function showToast(message, isPositive) {
+  const toast = elements.toast;
+  toast.textContent = message;
+  toast.classList.toggle("good", isPositive);
+  toast.classList.toggle("bad", !isPositive);
+  toast.classList.add("show");
+  if (state.toastTimer) clearTimeout(state.toastTimer);
+  state.toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1200);
+}
+
 function setModeUI() {
   if (state.mode === "flash") {
     elements.answerArea.style.display = "none";
@@ -238,6 +275,8 @@ function nextQuestion() {
   clearTimers();
   elements.flashActions.style.display = "none";
   elements.timer.classList.remove("active");
+  elements.timerBar.style.width = "0%";
+  elements.timerBar.style.transition = "none";
   elements.feedback.textContent = "";
   elements.answerInput.value = "";
   setHint("Indice prêt.");
@@ -256,6 +295,8 @@ function nextQuestion() {
   startHintTimer();
   if (state.mode === "flash") {
     startFlashTimer();
+  } else {
+    startQuestionTimer();
   }
 }
 
@@ -285,6 +326,7 @@ function revealAnswer() {
 
 function checkAnswer() {
   if (!state.current) return;
+  clearTimers();
   const { table, multiplier } = state.current;
   const answer = table * multiplier;
   const value = Number(elements.answerInput.value);
@@ -297,10 +339,12 @@ function checkAnswer() {
     elements.feedback.textContent = "Exact.";
     elements.feedback.style.color = "var(--accent-strong)";
     recordResult(true);
+    showToast("Juste.", true);
   } else {
     elements.feedback.textContent = `Incorrect. ${table} × ${multiplier} = ${answer}`;
     elements.feedback.style.color = "#8f3f2f";
     recordResult(false);
+    showToast("Faux.", false);
   }
   state.index += 1;
   updateProgressUI();
@@ -308,6 +352,17 @@ function checkAnswer() {
 
 function handleFlashResult(isCorrect) {
   recordResult(isCorrect);
+  showToast(isCorrect ? "Juste." : "Pas encore.", isCorrect);
+  state.index += 1;
+  updateProgressUI();
+  nextQuestion();
+}
+
+function handleTimeOut() {
+  if (!state.current) return;
+  const { table, multiplier } = state.current;
+  recordResult(false);
+  showToast(`Temps écoulé · ${table} × ${multiplier} = ${table * multiplier}`, false);
   state.index += 1;
   updateProgressUI();
   nextQuestion();
@@ -353,6 +408,11 @@ elements.questionCount.addEventListener("input", (event) => {
 
 elements.flashDelay.addEventListener("input", (event) => {
   state.flashDelay = Number(event.target.value);
+  updateRangeDisplay();
+});
+
+elements.timeLimit.addEventListener("input", (event) => {
+  state.timeLimit = Number(event.target.value);
   updateRangeDisplay();
 });
 

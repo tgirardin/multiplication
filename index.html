@@ -75,6 +75,11 @@
               <input id="flash-delay" type="range" min="3" max="10" value="6" />
               <span id="flash-delay-value">6</span>
             </div>
+            <div class="field">
+              <label for="time-limit">Temps par question (sec.)</label>
+              <input id="time-limit" type="range" min="4" max="20" value="8" />
+              <span id="time-limit-value">8</span>
+            </div>
             <label class="toggle">
               <input id="auto-hint" type="checkbox" checked />
               <span>Indice automatique après 5 sec.</span>
@@ -84,7 +89,7 @@
             <h3>Session focus</h3>
             <p class="focus-text">
               Le moteur adapte la fréquence des tables selon votre maîtrise pour
-              renforcer les zones faibles sans lassitude.
+              renforcer les zones faibles sans lassitude!
             </p>
             <button class="primary" id="start-btn">Démarrer la séance</button>
             <button class="secondary" id="reset-btn">Réinitialiser les progrès</button>
@@ -134,6 +139,7 @@
         <div class="mastery-grid" id="mastery-grid"></div>
       </section>
     </main>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script src="app.js"></script>
   </body>

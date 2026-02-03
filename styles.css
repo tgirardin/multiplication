@@ -379,6 +379,36 @@ h1 {
   transition: width 0.3s ease;
 }
 
+.toast {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.toast.good {
+  background: #2e5d4a;
+}
+
+.toast.bad {
+  background: #7b3b2f;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @keyframes rise {
   from {
     transform: translateY(16px);
