@@ -13,6 +13,7 @@ const state = {
   correct: 0,
   total: 0,
   perTable: {},
+  questionMode: "recall",
   hintTimer: null,
   flashTimer: null,
   questionTimer: null,
@@ -214,7 +215,7 @@ function clearTimers() {
 
 function startHintTimer() {
   clearTimeout(state.hintTimer);
-  if (!state.autoHint || state.mode === "flash") {
+  if (!state.autoHint || state.questionMode === "flash") {
     return;
   }
   state.hintTimer = setTimeout(() => {
@@ -233,7 +234,7 @@ function startFlashTimer() {
     elements.timerBar.style.width = "100%";
   });
   state.flashTimer = setTimeout(() => {
-    revealAnswer();
+    handleTimeOut();
   }, state.flashDelay * 1000);
 }
 
@@ -294,16 +295,29 @@ function resetSessionUI() {
   elements.timerBar.style.transition = "none";
   elements.progressLabel.textContent = "0 / 0";
   elements.progressFill.style.width = "0%";
+  state.questionMode = "recall";
 }
 
-function setModeUI() {
-  if (state.mode === "flash") {
+function setModeUI(mode = state.mode) {
+  if (mode === "flash") {
     elements.answerArea.style.display = "none";
     elements.choices.style.display = "flex";
   } else {
     elements.answerArea.style.display = "flex";
     elements.choices.style.display = "none";
   }
+}
+
+function resolveQuestionMode(table) {
+  if (state.mode === "flash" || state.mode === "recall") {
+    return state.mode;
+  }
+  const stats = state.perTable[table];
+  const accuracy = stats.total ? stats.correct / stats.total : 0;
+  if (accuracy >= 0.7) {
+    return Math.random() < 0.65 ? "flash" : "recall";
+  }
+  return Math.random() < 0.8 ? "recall" : "flash";
 }
 
 function nextQuestion() {
@@ -324,14 +338,18 @@ function nextQuestion() {
 
   state.current = state.queue[state.index];
   const { table, multiplier } = state.current;
+  state.questionMode = resolveQuestionMode(table);
+  setModeUI(state.questionMode);
   elements.question.textContent = `${table} × ${multiplier} = ?`;
-  elements.sessionMeta.textContent = `Table ${table} · Question ${state.index + 1}`;
+  elements.sessionMeta.textContent = `Table ${table} · Question ${state.index + 1} · ${state.questionMode === "flash" ? "Flash" : "Rappel"}`;
   updateProgressUI();
   startHintTimer();
-  if (state.mode === "flash") {
+  if (state.questionMode === "flash") {
     buildChoices();
+    startFlashTimer();
+  } else {
+    startQuestionTimer();
   }
-  startQuestionTimer();
 }
 
 function recordResult(isCorrect) {
@@ -359,7 +377,7 @@ function revealAnswer() {
 }
 
 function checkAnswer() {
-  if (!state.current) return;
+  if (!state.current || state.questionMode === "flash") return false;
   clearTimers();
   const { table, multiplier } = state.current;
   const answer = table * multiplier;
@@ -367,7 +385,7 @@ function checkAnswer() {
   if (!Number.isFinite(value)) {
     elements.feedback.textContent = "Entrez une réponse.";
     elements.feedback.style.color = "var(--muted)";
-    return;
+    return false;
   }
   if (value === answer) {
     elements.feedback.textContent = "Exact.";
@@ -382,10 +400,11 @@ function checkAnswer() {
   }
   state.index += 1;
   updateProgressUI();
+  return true;
 }
 
 function handleChoice(value) {
-  if (!state.current) return;
+  if (!state.current || state.questionMode !== "flash") return;
   clearTimers();
   const { table, multiplier } = state.current;
   const answer = table * multiplier;
@@ -452,7 +471,7 @@ function startSession() {
   state.total = 0;
   state.streak = 0;
   buildQueue();
-  setModeUI();
+  setModeUI("recall");
   updateProgressUI();
   setView(true);
   nextQuestion();
@@ -502,8 +521,9 @@ elements.selectNone.addEventListener("click", () => selectTables([]));
 elements.selectCore.addEventListener("click", () => selectTables([2, 3, 4, 5, 6]));
 
 elements.checkBtn.addEventListener("click", () => {
-  checkAnswer();
-  nextQuestion();
+  if (checkAnswer()) {
+    nextQuestion();
+  }
 });
 
 elements.revealBtn.addEventListener("click", revealAnswer);
@@ -511,8 +531,9 @@ elements.nextBtn.addEventListener("click", nextQuestion);
 
 elements.answerInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
-    checkAnswer();
-    nextQuestion();
+    if (checkAnswer()) {
+      nextQuestion();
+    }
   }
 });
 
