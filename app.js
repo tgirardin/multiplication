@@ -264,12 +264,17 @@ function showToast(message, isPositive) {
 }
 
 function setView(isSession) {
+  document.body.dataset.view = isSession ? "session" : "config";
   if (isSession) {
     elements.configView.classList.add("view-hidden");
     elements.sessionView.classList.remove("view-hidden");
+    elements.configView.hidden = true;
+    elements.sessionView.hidden = false;
   } else {
     elements.sessionView.classList.add("view-hidden");
     elements.configView.classList.remove("view-hidden");
+    elements.sessionView.hidden = true;
+    elements.configView.hidden = false;
   }
 }
 

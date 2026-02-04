@@ -48,6 +48,28 @@ body {
   gap: 32px;
 }
 
+[hidden] {
+  display: none !important;
+}
+
+.page > #config-view {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.page > #session-view {
+  display: block;
+}
+
+body[data-view="config"] #session-view {
+  display: none;
+}
+
+body[data-view="session"] #config-view {
+  display: none;
+}
+
 .view-hidden {
   display: none;
 }
