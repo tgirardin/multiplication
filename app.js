@@ -22,6 +22,8 @@ const state = {
 const storageKey = "memox9_progress_v1";
 
 const elements = {
+  configView: document.getElementById("config-view"),
+  sessionView: document.getElementById("session-view"),
   tableGrid: document.getElementById("table-grid"),
   masteryGrid: document.getElementById("mastery-grid"),
   startBtn: document.getElementById("start-btn"),
@@ -47,11 +49,10 @@ const elements = {
   revealBtn: document.getElementById("reveal-btn"),
   nextBtn: document.getElementById("next-btn"),
   feedback: document.getElementById("feedback"),
-  flashActions: document.getElementById("flash-actions"),
-  knowBtn: document.getElementById("know-btn"),
-  dontKnowBtn: document.getElementById("dontknow-btn"),
+  choices: document.getElementById("choices"),
   timer: document.getElementById("timer"),
   timerBar: document.getElementById("timer-bar"),
+  stopBtn: document.getElementById("stop-btn"),
   masteryGlobal: document.getElementById("mastery-global"),
   streak: document.getElementById("streak"),
   accuracy: document.getElementById("accuracy"),
@@ -233,7 +234,6 @@ function startFlashTimer() {
   });
   state.flashTimer = setTimeout(() => {
     revealAnswer();
-    elements.flashActions.style.display = "flex";
   }, state.flashDelay * 1000);
 }
 
@@ -263,23 +263,53 @@ function showToast(message, isPositive) {
   }, 1200);
 }
 
+function setView(isSession) {
+  if (isSession) {
+    elements.configView.classList.add("view-hidden");
+    elements.sessionView.classList.remove("view-hidden");
+  } else {
+    elements.sessionView.classList.add("view-hidden");
+    elements.configView.classList.remove("view-hidden");
+  }
+}
+
+function resetSessionUI() {
+  clearTimers();
+  state.queue = [];
+  state.index = 0;
+  state.current = null;
+  elements.question.textContent = "—";
+  elements.sessionMeta.textContent = "Prêt à commencer.";
+  elements.feedback.textContent = "";
+  elements.answerInput.value = "";
+  setHint("Indice prêt.");
+  elements.choices.innerHTML = "";
+  elements.timer.classList.remove("active");
+  elements.timerBar.style.width = "0%";
+  elements.timerBar.style.transition = "none";
+  elements.progressLabel.textContent = "0 / 0";
+  elements.progressFill.style.width = "0%";
+}
+
 function setModeUI() {
   if (state.mode === "flash") {
     elements.answerArea.style.display = "none";
+    elements.choices.style.display = "flex";
   } else {
     elements.answerArea.style.display = "flex";
+    elements.choices.style.display = "none";
   }
 }
 
 function nextQuestion() {
   clearTimers();
-  elements.flashActions.style.display = "none";
   elements.timer.classList.remove("active");
   elements.timerBar.style.width = "0%";
   elements.timerBar.style.transition = "none";
   elements.feedback.textContent = "";
   elements.answerInput.value = "";
   setHint("Indice prêt.");
+  elements.choices.innerHTML = "";
 
   if (state.index >= state.queue.length) {
     elements.question.textContent = "Séance terminée.";
@@ -294,10 +324,9 @@ function nextQuestion() {
   updateProgressUI();
   startHintTimer();
   if (state.mode === "flash") {
-    startFlashTimer();
-  } else {
-    startQuestionTimer();
+    buildChoices();
   }
+  startQuestionTimer();
 }
 
 function recordResult(isCorrect) {
@@ -350,12 +379,46 @@ function checkAnswer() {
   updateProgressUI();
 }
 
-function handleFlashResult(isCorrect) {
-  recordResult(isCorrect);
-  showToast(isCorrect ? "Juste." : "Pas encore.", isCorrect);
+function handleChoice(value) {
+  if (!state.current) return;
+  clearTimers();
+  const { table, multiplier } = state.current;
+  const answer = table * multiplier;
+  if (value === answer) {
+    recordResult(true);
+    showToast("Juste.", true);
+    elements.feedback.textContent = "Exact.";
+    elements.feedback.style.color = "var(--accent-strong)";
+  } else {
+    recordResult(false);
+    showToast("Faux.", false);
+    elements.feedback.textContent = `Incorrect. ${table} × ${multiplier} = ${answer}`;
+    elements.feedback.style.color = "#8f3f2f";
+  }
   state.index += 1;
   updateProgressUI();
   nextQuestion();
+}
+
+function buildChoices() {
+  const { table, multiplier } = state.current;
+  const correct = table * multiplier;
+  const choices = new Set([correct]);
+  while (choices.size < 3) {
+    const altMultiplier = Math.ceil(Math.random() * 9);
+    if (altMultiplier === multiplier) continue;
+    choices.add(table * altMultiplier);
+  }
+  const shuffled = Array.from(choices).sort(() => Math.random() - 0.5);
+  elements.choices.innerHTML = "";
+  shuffled.forEach((value) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "choice-btn";
+    btn.textContent = value.toString();
+    btn.addEventListener("click", () => handleChoice(value));
+    elements.choices.appendChild(btn);
+  });
 }
 
 function handleTimeOut() {
@@ -366,6 +429,11 @@ function handleTimeOut() {
   state.index += 1;
   updateProgressUI();
   nextQuestion();
+}
+
+function stopSession() {
+  resetSessionUI();
+  setView(false);
 }
 
 function startSession() {
@@ -381,6 +449,7 @@ function startSession() {
   buildQueue();
   setModeUI();
   updateProgressUI();
+  setView(true);
   nextQuestion();
 }
 
@@ -421,6 +490,7 @@ elements.autoHint.addEventListener("change", (event) => {
 });
 
 elements.startBtn.addEventListener("click", startSession);
+elements.stopBtn.addEventListener("click", stopSession);
 elements.resetBtn.addEventListener("click", resetProgress);
 elements.selectAll.addEventListener("click", () => selectTables(tables));
 elements.selectNone.addEventListener("click", () => selectTables([]));
@@ -433,8 +503,6 @@ elements.checkBtn.addEventListener("click", () => {
 
 elements.revealBtn.addEventListener("click", revealAnswer);
 elements.nextBtn.addEventListener("click", nextQuestion);
-elements.knowBtn.addEventListener("click", () => handleFlashResult(true));
-elements.dontKnowBtn.addEventListener("click", () => handleFlashResult(false));
 
 elements.answerInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
@@ -448,3 +516,4 @@ renderTables();
 renderMastery();
 renderStats();
 updateRangeDisplay();
+setView(false);
