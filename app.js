@@ -10,10 +10,14 @@ const state = {
   index: 0,
   current: null,
   streak: 0,
+  bestStreak: 0,
   correct: 0,
   total: 0,
   perTable: {},
+  history: [],
+  sessionPerTable: {},
   questionMode: "recall",
+  isSessionComplete: false,
   hintTimer: null,
   flashTimer: null,
   questionTimer: null,
@@ -21,12 +25,14 @@ const state = {
 };
 
 const storageKey = "memox9_progress_v1";
+const historyKey = "memox9_history_v1";
 
 const elements = {
   configView: document.getElementById("config-view"),
   sessionView: document.getElementById("session-view"),
   tableGrid: document.getElementById("table-grid"),
   masteryGrid: document.getElementById("mastery-grid"),
+  historyList: document.getElementById("history-list"),
   startBtn: document.getElementById("start-btn"),
   resetBtn: document.getElementById("reset-btn"),
   selectAll: document.getElementById("select-all"),
@@ -54,6 +60,16 @@ const elements = {
   timer: document.getElementById("timer"),
   timerBar: document.getElementById("timer-bar"),
   stopBtn: document.getElementById("stop-btn"),
+  practiceCard: document.getElementById("practice-card"),
+  summaryCard: document.getElementById("summary-card"),
+  summaryScore: document.getElementById("summary-score"),
+  summaryAccuracy: document.getElementById("summary-accuracy"),
+  summaryBestStreak: document.getElementById("summary-best-streak"),
+  summaryWeak: document.getElementById("summary-weak"),
+  summaryReco: document.getElementById("summary-reco"),
+  summaryRetryBtn: document.getElementById("summary-retry-btn"),
+  summaryTargetBtn: document.getElementById("summary-target-btn"),
+  summaryCloseBtn: document.getElementById("summary-close-btn"),
   masteryGlobal: document.getElementById("mastery-global"),
   streak: document.getElementById("streak"),
   accuracy: document.getElementById("accuracy"),
@@ -78,6 +94,36 @@ function initProgress() {
 
 function persistProgress() {
   localStorage.setItem(storageKey, JSON.stringify(state.perTable));
+}
+
+function initHistory() {
+  const stored = localStorage.getItem(historyKey);
+  if (!stored) {
+    state.history = [];
+    return;
+  }
+  try {
+    const parsed = JSON.parse(stored);
+    if (!Array.isArray(parsed)) {
+      state.history = [];
+      return;
+    }
+    state.history = parsed
+      .filter((entry) => entry && typeof entry.date === "string")
+      .map((entry) => ({
+        date: entry.date,
+        sessions: Number(entry.sessions) || 0,
+        correct: Number(entry.correct) || 0,
+        total: Number(entry.total) || 0,
+        bestStreak: Number(entry.bestStreak) || 0,
+      }));
+  } catch {
+    state.history = [];
+  }
+}
+
+function persistHistory() {
+  localStorage.setItem(historyKey, JSON.stringify(state.history));
 }
 
 function renderTables() {
@@ -128,6 +174,49 @@ function renderStats() {
   elements.accuracy.textContent = `${accuracy}%`;
 }
 
+function formatDateLabel(dateKey) {
+  const [year, month, day] = dateKey.split("-").map((value) => Number(value));
+  if (!year || !month || !day) return dateKey;
+  const date = new Date(year, month - 1, day);
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(date);
+}
+
+function renderHistory() {
+  elements.historyList.innerHTML = "";
+  if (state.history.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "history-empty";
+    empty.textContent = "Aucune séance enregistrée pour le moment.";
+    elements.historyList.appendChild(empty);
+    return;
+  }
+
+  const entries = [...state.history]
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 12);
+
+  entries.forEach((entry) => {
+    const accuracy = entry.total ? Math.round((entry.correct / entry.total) * 100) : 0;
+    const card = document.createElement("article");
+    card.className = "history-item";
+    card.innerHTML = `
+      <div class="history-head">
+        <strong>${formatDateLabel(entry.date)}</strong>
+        <span class="history-meta">${entry.sessions} séance${entry.sessions > 1 ? "s" : ""} · ${entry.correct} / ${entry.total}</span>
+      </div>
+      <div class="history-bar">
+        <div class="history-fill" style="width:${accuracy}%"></div>
+      </div>
+      <span class="history-meta">Exactitude du jour: ${accuracy}% · Meilleure série: ${entry.bestStreak}</span>
+    `;
+    elements.historyList.appendChild(card);
+  });
+}
+
 function toggleTable(table, btn) {
   if (state.selected.has(table)) {
     state.selected.delete(table);
@@ -147,6 +236,46 @@ function updateRangeDisplay() {
   elements.questionCountValue.textContent = state.questions;
   elements.flashDelayValue.textContent = state.flashDelay;
   elements.timeLimitValue.textContent = state.timeLimit;
+}
+
+function getTodayKey() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = `${now.getMonth() + 1}`.padStart(2, "0");
+  const day = `${now.getDate()}`.padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getWeakestTables(limit = 2) {
+  const totalAttempts = tables.reduce((sum, table) => sum + state.perTable[table].total, 0);
+  if (totalAttempts === 0) {
+    return [2, 3].slice(0, limit);
+  }
+
+  const ranked = tables
+    .map((table) => {
+      const stats = state.perTable[table];
+      const accuracy = stats.total ? stats.correct / stats.total : 0;
+      const confidence = Math.min(stats.total, 18) / 18;
+      const weakness = (1 - accuracy) * 0.75 + (1 - confidence) * 0.25;
+      return { table, weakness, accuracy, total: stats.total };
+    })
+    .sort(
+      (a, b) =>
+        b.weakness - a.weakness ||
+        a.accuracy - b.accuracy ||
+        a.total - b.total ||
+        a.table - b.table,
+    );
+  return ranked.slice(0, limit).map((item) => item.table);
+}
+
+function applyTargetedSelection() {
+  const weakest = getWeakestTables(2);
+  if (weakest.length === 0) return [];
+  state.selected = new Set(weakest);
+  renderTables();
+  return weakest;
 }
 
 function weightedTablePick() {
@@ -186,6 +315,90 @@ function buildQueue() {
     if (lastPairs.length > 4) lastPairs.shift();
     state.queue.push({ table, multiplier });
   }
+}
+
+function initSessionTableStats() {
+  state.sessionPerTable = {};
+  tables.forEach((table) => {
+    state.sessionPerTable[table] = { correct: 0, total: 0 };
+  });
+}
+
+function getSessionWeakTables(limit = 2) {
+  const attempted = tables
+    .map((table) => {
+      const stats = state.sessionPerTable[table];
+      const accuracy = stats.total ? stats.correct / stats.total : 1;
+      return { table, accuracy, total: stats.total };
+    })
+    .filter((item) => item.total > 0)
+    .sort((a, b) => a.accuracy - b.accuracy || b.total - a.total || a.table - b.table);
+  return attempted.slice(0, limit).map((item) => item.table);
+}
+
+function buildRecommendation(accuracy, weakTables) {
+  if (accuracy >= 90) {
+    return "Excellent travail. Passez en mode flash ou augmentez le volume pour consolider.";
+  }
+  if (weakTables.length >= 2) {
+    return `Priorité: relancer une séance ciblée sur les tables ${weakTables[0]} et ${weakTables[1]}.`;
+  }
+  if (weakTables.length === 1) {
+    return `Priorité: retravailler la table ${weakTables[0]} avec des séries courtes en rappel actif.`;
+  }
+  return "Refaites une séance courte pour stabiliser les acquis du jour.";
+}
+
+function pushHistoryEntry() {
+  const day = getTodayKey();
+  const existing = state.history.find((entry) => entry.date === day);
+  if (existing) {
+    existing.sessions += 1;
+    existing.correct += state.correct;
+    existing.total += state.total;
+    existing.bestStreak = Math.max(existing.bestStreak, state.bestStreak);
+  } else {
+    state.history.push({
+      date: day,
+      sessions: 1,
+      correct: state.correct,
+      total: state.total,
+      bestStreak: state.bestStreak,
+    });
+  }
+  state.history = state.history
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(-90);
+  persistHistory();
+  renderHistory();
+}
+
+function showSessionSummary() {
+  const accuracy = state.total ? Math.round((state.correct / state.total) * 100) : 0;
+  const weakTables = getSessionWeakTables(2);
+  elements.summaryScore.textContent = `${state.correct} / ${state.total}`;
+  elements.summaryAccuracy.textContent = `${accuracy}%`;
+  elements.summaryBestStreak.textContent = `${state.bestStreak}`;
+  elements.summaryWeak.textContent = weakTables.length
+    ? `Tables à renforcer: ${weakTables.join(" et ")}`
+    : "Tables à renforcer: aucune (séance équilibrée).";
+  elements.summaryReco.textContent = `Conseil: ${buildRecommendation(accuracy, weakTables)}`;
+  elements.practiceCard.hidden = true;
+  elements.summaryCard.hidden = false;
+}
+
+function completeSession() {
+  if (state.isSessionComplete) return;
+  state.isSessionComplete = true;
+  state.current = null;
+  clearTimers();
+  elements.timer.classList.remove("active");
+  elements.timerBar.style.width = "100%";
+  elements.timerBar.style.transition = "none";
+  elements.question.textContent = "Séance terminée.";
+  elements.sessionMeta.textContent = "Analyse de vos résultats.";
+  pushHistoryEntry();
+  showSessionSummary();
 }
 
 function updateProgressUI() {
@@ -284,18 +497,29 @@ function resetSessionUI() {
   state.queue = [];
   state.index = 0;
   state.current = null;
+  state.isSessionComplete = false;
   elements.question.textContent = "—";
   elements.sessionMeta.textContent = "Prêt à commencer.";
   elements.feedback.textContent = "";
   elements.answerInput.value = "";
   setHint("Indice prêt.");
   elements.choices.innerHTML = "";
+  elements.practiceCard.hidden = false;
+  elements.summaryCard.hidden = true;
   elements.timer.classList.remove("active");
   elements.timerBar.style.width = "0%";
   elements.timerBar.style.transition = "none";
   elements.progressLabel.textContent = "0 / 0";
   elements.progressFill.style.width = "0%";
   state.questionMode = "recall";
+}
+
+function setMode(mode) {
+  state.mode = mode;
+  const target = document.querySelector(`input[name="mode"][value="${mode}"]`);
+  if (target) {
+    target.checked = true;
+  }
 }
 
 function setModeUI(mode = state.mode) {
@@ -314,6 +538,9 @@ function resolveQuestionMode(table) {
   }
   const stats = state.perTable[table];
   const accuracy = stats.total ? stats.correct / stats.total : 0;
+  if (state.mode === "targeted") {
+    return accuracy >= 0.75 ? (Math.random() < 0.45 ? "flash" : "recall") : "recall";
+  }
   if (accuracy >= 0.7) {
     return Math.random() < 0.65 ? "flash" : "recall";
   }
@@ -331,8 +558,7 @@ function nextQuestion() {
   elements.choices.innerHTML = "";
 
   if (state.index >= state.queue.length) {
-    elements.question.textContent = "Séance terminée.";
-    elements.sessionMeta.textContent = "Bravo, votre cerveau a travaillé efficacement.";
+    completeSession();
     return;
   }
 
@@ -355,10 +581,14 @@ function nextQuestion() {
 function recordResult(isCorrect) {
   const { table } = state.current;
   const stats = state.perTable[table];
+  const sessionStats = state.sessionPerTable[table];
   stats.total += 1;
+  sessionStats.total += 1;
   if (isCorrect) {
     stats.correct += 1;
+    sessionStats.correct += 1;
     state.streak += 1;
+    state.bestStreak = Math.max(state.bestStreak, state.streak);
   } else {
     state.streak = 0;
   }
@@ -461,16 +691,29 @@ function stopSession() {
 }
 
 function startSession() {
-  if (state.selected.size === 0) {
+  if (state.mode === "targeted") {
+    const tablesPicked = applyTargetedSelection();
+    if (tablesPicked.length === 0) {
+      elements.sessionMeta.textContent = "Impossible de déterminer des tables ciblées.";
+      return;
+    }
+    showToast(`Révision ciblée: tables ${tablesPicked.join(" et ")}`, true);
+  } else if (state.selected.size === 0) {
     elements.sessionMeta.textContent = "Sélectionnez au moins une table.";
     return;
   }
-  state.queue = [];
-  state.index = 0;
+  resetSessionUI();
   state.correct = 0;
   state.total = 0;
   state.streak = 0;
+  state.bestStreak = 0;
+  renderStats();
+  initSessionTableStats();
   buildQueue();
+  if (state.queue.length === 0) {
+    elements.sessionMeta.textContent = "Aucune question générée pour cette session.";
+    return;
+  }
   setModeUI("recall");
   updateProgressUI();
   setView(true);
@@ -478,18 +721,21 @@ function startSession() {
 }
 
 function resetProgress() {
-  if (!confirm("Réinitialiser toute la maîtrise enregistrée ?")) return;
+  if (!confirm("Réinitialiser toute la maîtrise et l'historique enregistrés ?")) return;
   tables.forEach((table) => {
     state.perTable[table] = { correct: 0, total: 0 };
   });
+  state.history = [];
   persistProgress();
+  persistHistory();
   renderMastery();
+  renderHistory();
   renderStats();
 }
 
 document.querySelectorAll('input[name="mode"]').forEach((radio) => {
   radio.addEventListener("change", (event) => {
-    state.mode = event.target.value;
+    setMode(event.target.value);
     setModeUI();
   });
 });
@@ -516,6 +762,13 @@ elements.autoHint.addEventListener("change", (event) => {
 elements.startBtn.addEventListener("click", startSession);
 elements.stopBtn.addEventListener("click", stopSession);
 elements.resetBtn.addEventListener("click", resetProgress);
+elements.summaryRetryBtn.addEventListener("click", startSession);
+elements.summaryTargetBtn.addEventListener("click", () => {
+  setMode("targeted");
+  setModeUI();
+  startSession();
+});
+elements.summaryCloseBtn.addEventListener("click", stopSession);
 elements.selectAll.addEventListener("click", () => selectTables(tables));
 elements.selectNone.addEventListener("click", () => selectTables([]));
 elements.selectCore.addEventListener("click", () => selectTables([2, 3, 4, 5, 6]));
@@ -538,8 +791,11 @@ elements.answerInput.addEventListener("keydown", (event) => {
 });
 
 initProgress();
+initHistory();
+initSessionTableStats();
 renderTables();
 renderMastery();
+renderHistory();
 renderStats();
 updateRangeDisplay();
 setView(false);

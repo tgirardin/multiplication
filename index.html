@@ -65,6 +65,10 @@
                   <input type="radio" name="mode" value="mix" />
                   <span>Mélange stratégique</span>
                 </label>
+                <label class="mode-option">
+                  <input type="radio" name="mode" value="targeted" />
+                  <span>Révision ciblée (2 tables faibles)</span>
+                </label>
               </div>
               <div class="field">
                 <label for="question-count">Questions</label>
@@ -105,6 +109,14 @@
           </div>
           <div class="mastery-grid" id="mastery-grid"></div>
         </section>
+
+        <section class="panel">
+          <div class="panel-title">
+            <h2>Progression jour par jour</h2>
+            <p>Historique local des séances pour visualiser vos habitudes.</p>
+          </div>
+          <div class="history-list" id="history-list"></div>
+        </section>
       </div>
 
       <section class="panel session-panel view-hidden" id="session-view" hidden>
@@ -122,7 +134,7 @@
           <button class="ghost" id="stop-btn">Arrêter la session</button>
         </div>
 
-        <div class="practice-card">
+        <div class="practice-card" id="practice-card">
           <div class="timer" id="timer">
             <div class="timer-bar" id="timer-bar"></div>
           </div>
@@ -136,6 +148,31 @@
           <div class="choices" id="choices" aria-label="Choix multiples"></div>
           <p class="feedback" id="feedback"></p>
           <button class="ghost" id="next-btn">Question suivante</button>
+        </div>
+
+        <div class="summary-card" id="summary-card" hidden>
+          <h3>Bilan de séance</h3>
+          <div class="summary-metrics">
+            <div class="summary-metric">
+              <span class="metric-label">Score</span>
+              <strong id="summary-score">0 / 0</strong>
+            </div>
+            <div class="summary-metric">
+              <span class="metric-label">Exactitude</span>
+              <strong id="summary-accuracy">0%</strong>
+            </div>
+            <div class="summary-metric">
+              <span class="metric-label">Meilleure série</span>
+              <strong id="summary-best-streak">0</strong>
+            </div>
+          </div>
+          <p class="summary-weak" id="summary-weak">Tables à renforcer: —</p>
+          <p class="summary-reco" id="summary-reco">Conseil: —</p>
+          <div class="summary-actions">
+            <button class="primary" id="summary-retry-btn">Refaire la séance</button>
+            <button class="ghost" id="summary-target-btn">Révision ciblée auto</button>
+            <button class="secondary" id="summary-close-btn">Retour à l'accueil</button>
+          </div>
         </div>
       </section>
     </main>
