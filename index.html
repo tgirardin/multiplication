@@ -12,118 +12,60 @@
       <div id="config-view">
         <header class="hero">
           <div>
-            <p class="eyebrow">Apprentissage structuré</p>
+            <p class="eyebrow">Apprentissage intelligent</p>
             <h1>MÉMOx9</h1>
             <p class="subtitle">
-              Une méthode sérieuse et épurée pour ancrer les tables de 1 à 9 par
-              coeur, avec un rythme intelligent et mesuré.
+              Progression par répétition espacée. Gagnez de l'XP et montez de niveau en maîtrisant vos tables.
             </p>
           </div>
           <div class="hero-card">
             <div class="metric">
-              <span class="metric-label">Maîtrise moyenne</span>
-              <span class="metric-value" id="mastery-global">0%</span>
+              <span class="metric-label">Niveau</span>
+              <span class="metric-value badge" id="level-label">Niv. 1</span>
             </div>
-            <div class="metric">
-              <span class="metric-label">Série actuelle</span>
-              <span class="metric-value" id="streak">0</span>
-            </div>
-            <div class="metric">
-              <span class="metric-label">Exactitude</span>
-              <span class="metric-value" id="accuracy">0%</span>
+            <div class="xp-container">
+               <div class="metric-header">
+                 <span class="metric-label">Expérience</span>
+               </div>
+               <div class="xp-bar">
+                 <div class="xp-fill" id="xp-bar-fill" style="width: 0%"></div>
+               </div>
             </div>
           </div>
         </header>
 
         <section class="panel">
-          <div class="panel-title">
-            <h2>Configuration de session</h2>
-            <p>Choisissez les tables, le mode, puis lancez la séance.</p>
-          </div>
           <div class="panel-grid">
             <div class="block">
-              <h3>Tables</h3>
-              <div class="table-grid" id="table-grid" role="group" aria-label="Tables"></div>
-              <div class="quick-actions">
-                <button class="ghost" id="select-all">Tout</button>
-                <button class="ghost" id="select-none">Aucun</button>
-                <button class="ghost" id="select-core">2–6</button>
+              <h3>Votre progression</h3>
+              <div class="metric-row">
+                 <div class="metric-item">
+                    <span class="metric-val" id="mastery-global">0%</span>
+                    <span class="metric-lab">Maîtrise</span>
+                 </div>
+                 <div class="metric-item">
+                    <span class="metric-val" id="streak">0</span>
+                    <span class="metric-lab">Série</span>
+                 </div>
               </div>
-            </div>
-            <div class="block">
-              <h3>Mode</h3>
-              <div class="modes">
-                <label class="mode-option">
-                  <input type="radio" name="mode" value="recall" checked />
-                  <span>Rappel actif</span>
-                </label>
-                <label class="mode-option">
-                  <input type="radio" name="mode" value="flash" />
-                  <span>Choix multiples</span>
-                </label>
-                <label class="mode-option">
-                  <input type="radio" name="mode" value="mix" />
-                  <span>Mélange stratégique</span>
-                </label>
-                <label class="mode-option">
-                  <input type="radio" name="mode" value="targeted" />
-                  <span>Révision ciblée (2 tables faibles)</span>
-                </label>
-              </div>
-              <div class="field">
-                <label for="question-count">Questions</label>
-                <input id="question-count" type="range" min="10" max="36" value="18" />
-                <span id="question-count-value">18</span>
-              </div>
-              <div class="field">
-                <label for="flash-delay">Vitesse flash (sec.)</label>
-                <input id="flash-delay" type="range" min="3" max="10" value="6" />
-                <span id="flash-delay-value">6</span>
-              </div>
-              <div class="field">
-                <label for="time-limit">Temps par question (sec.)</label>
-                <input id="time-limit" type="range" min="4" max="20" value="8" />
-                <span id="time-limit-value">8</span>
-              </div>
-              <label class="toggle">
-                <input id="auto-hint" type="checkbox" checked />
-                <span>Indice automatique après 5 sec.</span>
-              </label>
             </div>
             <div class="block focus-block">
-              <h3>Session focus</h3>
+              <h3>Prêt à apprendre ?</h3>
               <p class="focus-text">
-                Le moteur adapte la fréquence des tables selon votre maîtrise pour
-                renforcer les zones faibles sans lassitude!
+                L'algorithme a préparé une séance personnalisée basée sur vos besoins actuels.
               </p>
-              <button class="primary" id="start-btn">Démarrer la séance</button>
-              <button class="secondary" id="reset-btn">Réinitialiser les progrès</button>
+              <button class="primary" id="start-btn">Lancer la séance (Smart SRS)</button>
+              <button class="ghost small" id="reset-btn" style="margin-top:10px">Tout réinitialiser</button>
             </div>
           </div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-title">
-            <h2>Maîtrise par table</h2>
-            <p>Suivi détaillé pour garder une progression visible et motivante.</p>
-          </div>
-          <div class="mastery-grid" id="mastery-grid"></div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-title">
-            <h2>Progression jour par jour</h2>
-            <p>Historique local des séances pour visualiser vos habitudes.</p>
-          </div>
-          <div class="history-list" id="history-list"></div>
         </section>
       </div>
 
       <section class="panel session-panel view-hidden" id="session-view" hidden>
         <div class="session-header">
           <div>
-            <h2>Exercice en cours</h2>
-            <p id="session-meta">Prêt à commencer.</p>
+            <h2>Session en cours</h2>
+            <p id="session-meta">Chargement...</p>
           </div>
           <div class="progress">
             <span id="progress-label">0 / 0</span>
@@ -131,23 +73,28 @@
               <div class="progress-fill" id="progress-fill"></div>
             </div>
           </div>
-          <button class="ghost" id="stop-btn">Arrêter la session</button>
+          <button class="ghost" id="stop-btn">Quitter</button>
         </div>
 
         <div class="practice-card" id="practice-card">
           <div class="timer" id="timer">
             <div class="timer-bar" id="timer-bar"></div>
           </div>
-          <div class="question" id="question">—</div>
-          <div class="hint" id="hint">Indice prêt.</div>
-          <div class="answer-area" id="answer-area">
-            <input id="answer-input" type="number" inputmode="numeric" placeholder="Votre réponse" />
-            <button class="primary" id="check-btn">Valider</button>
-            <button class="ghost" id="reveal-btn">Révéler</button>
+          
+          <div class="question-container">
+            <div class="question" id="question">—</div>
           </div>
-          <div class="choices" id="choices" aria-label="Choix multiples"></div>
+          
+          <div class="hint" id="hint">Indice prêt.</div>
+          
+          <div class="answer-area" id="answer-area">
+            <input id="answer-input" type="number" inputmode="numeric" placeholder="?" autofocus />
+            <button class="primary" id="check-btn">Valider</button>
+          </div>
+          
           <p class="feedback" id="feedback"></p>
-          <button class="ghost" id="next-btn">Question suivante</button>
+          <!-- Hidden next btn for flow control if needed -->
+          <button class="ghost" id="next-btn" hidden>Suivant</button>
         </div>
 
         <div class="summary-card" id="summary-card" hidden>
@@ -157,21 +104,14 @@
               <span class="metric-label">Score</span>
               <strong id="summary-score">0 / 0</strong>
             </div>
-            <div class="summary-metric">
-              <span class="metric-label">Exactitude</span>
-              <strong id="summary-accuracy">0%</strong>
-            </div>
-            <div class="summary-metric">
-              <span class="metric-label">Meilleure série</span>
-              <strong id="summary-best-streak">0</strong>
+             <div class="summary-metric">
+              <span class="metric-label">XP Gagné</span>
+              <strong id="summary-xp" style="color: var(--accent)">+0 XP</strong>
             </div>
           </div>
-          <p class="summary-weak" id="summary-weak">Tables à renforcer: —</p>
-          <p class="summary-reco" id="summary-reco">Conseil: —</p>
           <div class="summary-actions">
-            <button class="primary" id="summary-retry-btn">Refaire la séance</button>
-            <button class="ghost" id="summary-target-btn">Révision ciblée auto</button>
-            <button class="secondary" id="summary-close-btn">Retour à l'accueil</button>
+            <button class="primary" id="summary-retry-btn">Nouvelle séance</button>
+            <button class="secondary" id="summary-close-btn">Retour au menu</button>
           </div>
         </div>
       </section>
