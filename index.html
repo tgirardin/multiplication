@@ -1,123 +1,161 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MÉMOx9 — Tables de multiplication</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body data-view="config">
-    <div class="bg-lines" aria-hidden="true"></div>
-    <main class="page">
-      <div id="config-view">
-        <header class="hero">
-          <div>
-            <p class="eyebrow">Apprentissage intelligent</p>
-            <h1>MÉMOx9</h1>
-            <p class="subtitle">
-              Progression par répétition espacée. Gagnez de l'XP et montez de niveau en maîtrisant vos tables.
-            </p>
-          </div>
-          <div class="hero-card">
-            <div class="metric">
-              <span class="metric-label">Niveau</span>
-              <span class="metric-value badge" id="level-label">Niv. 1</span>
-            </div>
-            <div class="xp-container">
-               <div class="metric-header">
-                 <span class="metric-label">Expérience</span>
-               </div>
-               <div class="xp-bar">
-                 <div class="xp-fill" id="xp-bar-fill" style="width: 0%"></div>
-               </div>
-            </div>
-          </div>
-        </header>
 
-        <section class="panel">
-          <div class="panel-grid">
-            <div class="block">
-              <h3>Votre progression</h3>
-              <div class="metric-row">
-                 <div class="metric-item">
-                    <span class="metric-val" id="mastery-global">0%</span>
-                    <span class="metric-lab">Maîtrise</span>
-                 </div>
-                 <div class="metric-item">
-                    <span class="metric-val" id="streak">0</span>
-                    <span class="metric-lab">Série</span>
-                 </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MÉMOx9 — Tables de multiplication</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body data-view="config">
+  <div class="bg-lines" aria-hidden="true"></div>
+  <main class="page">
+    <div id="config-view">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Apprentissage intelligent</p>
+          <h1>MÉMOx9</h1>
+          <p class="subtitle">
+            Progression par répétition espacée. Gagnez de l'XP et montez de niveau en maîtrisant vos tables.
+          </p>
+        </div>
+        <div class="hero-card">
+          <div class="metric">
+            <span class="metric-label">Niveau</span>
+            <span class="metric-value badge" id="level-label">Niv. 1</span>
+          </div>
+          <div class="xp-container">
+            <div class="metric-header">
+              <span class="metric-label">Expérience</span>
+            </div>
+            <div class="xp-bar">
+              <div class="xp-fill" id="xp-bar-fill" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="panel">
+        <div class="panel-grid">
+          <div class="block">
+            <h3>Votre progression</h3>
+            <div class="metric-row">
+              <div class="metric-item">
+                <span class="metric-val" id="mastery-global">0%</span>
+                <span class="metric-lab">Maîtrise</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-val" id="streak">0</span>
+                <span class="metric-lab">Série</span>
               </div>
             </div>
-            <div class="block focus-block">
-              <h3>Prêt à apprendre ?</h3>
-              <p class="focus-text">
-                L'algorithme a préparé une séance personnalisée basée sur vos besoins actuels.
-              </p>
-              <button class="primary" id="start-btn">Lancer la séance (Smart SRS)</button>
-              <button class="ghost small" id="reset-btn" style="margin-top:10px">Tout réinitialiser</button>
+          </div>
+          <div class="block focus-block">
+            <h3>Prêt à apprendre ?</h3>
+            <p class="focus-text">
+              Séance personnalisée (QCM et Rappel) pour votre niveau actuel.
+            </p>
+            <div class="button-stack">
+              <button class="primary" id="start-btn">Jouer maintenant</button>
+              <button class="secondary" id="tips-btn">Astuces & Secrets</button>
             </div>
-          </div>
-        </section>
-      </div>
-
-      <section class="panel session-panel view-hidden" id="session-view" hidden>
-        <div class="session-header">
-          <div>
-            <h2>Session en cours</h2>
-            <p id="session-meta">Chargement...</p>
-          </div>
-          <div class="progress">
-            <span id="progress-label">0 / 0</span>
-            <div class="progress-track">
-              <div class="progress-fill" id="progress-fill"></div>
-            </div>
-          </div>
-          <button class="ghost" id="stop-btn">Quitter</button>
-        </div>
-
-        <div class="practice-card" id="practice-card">
-          <div class="timer" id="timer">
-            <div class="timer-bar" id="timer-bar"></div>
-          </div>
-          
-          <div class="question-container">
-            <div class="question" id="question">—</div>
-          </div>
-          
-          <div class="hint" id="hint">Indice prêt.</div>
-          
-          <div class="answer-area" id="answer-area">
-            <input id="answer-input" type="number" inputmode="numeric" placeholder="?" autofocus />
-            <button class="primary" id="check-btn">Valider</button>
-          </div>
-          
-          <p class="feedback" id="feedback"></p>
-          <!-- Hidden next btn for flow control if needed -->
-          <button class="ghost" id="next-btn" hidden>Suivant</button>
-        </div>
-
-        <div class="summary-card" id="summary-card" hidden>
-          <h3>Bilan de séance</h3>
-          <div class="summary-metrics">
-            <div class="summary-metric">
-              <span class="metric-label">Score</span>
-              <strong id="summary-score">0 / 0</strong>
-            </div>
-             <div class="summary-metric">
-              <span class="metric-label">XP Gagné</span>
-              <strong id="summary-xp" style="color: var(--accent)">+0 XP</strong>
-            </div>
-          </div>
-          <div class="summary-actions">
-            <button class="primary" id="summary-retry-btn">Nouvelle séance</button>
-            <button class="secondary" id="summary-close-btn">Retour au menu</button>
+            <button class="ghost small" id="reset-btn" style="margin-top:10px">Tout réinitialiser</button>
           </div>
         </div>
       </section>
-    </main>
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
 
-    <script src="app.js"></script>
-  </body>
+    <div class="view-hidden" id="tips-view" hidden>
+      <header class="section-header">
+        <h2>Astuces de Calcul</h2>
+        <button class="ghost" id="tips-back-btn">Retour</button>
+      </header>
+      <div class="tips-grid">
+        <article class="tip-card">
+          <h3>La règle du 9</h3>
+          <p>Pour la table de 9, multipliez par 10 et retirez le nombre.</p>
+          <code>9 × 8 → 80 - 8 = 72</code>
+        </article>
+        <article class="tip-card">
+          <h3>Pair × Impair</h3>
+          <p>Le résultat est toujours <strong>Pair</strong>.</p>
+          <code>2 × 3 = 6</code>
+        </article>
+        <article class="tip-card">
+          <h3>Impair × Impair</h3>
+          <p>Le résultat est toujours <strong>Impair</strong>.</p>
+          <code>3 × 3 = 9</code>
+        </article>
+        <article class="tip-card">
+          <h3>La table de 5</h3>
+          <p>Ça se termine toujours par 0 ou 5.</p>
+          <code>5 × 4 = 20, 5 × 5 = 25</code>
+        </article>
+      </div>
+    </div>
+
+    <section class="panel session-panel view-hidden" id="session-view" hidden>
+      <div class="session-header">
+        <div>
+          <h2>Session en cours</h2>
+          <p id="session-meta">À vous de jouer</p>
+        </div>
+        <div class="progress">
+          <span id="progress-label">0 / 0</span>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+        <button class="ghost" id="stop-btn">Quitter</button>
+      </div>
+
+      <div class="practice-card" id="practice-card">
+        <div class="timer" id="timer">
+          <div class="timer-bar" id="timer-bar"></div>
+        </div>
+
+        <div class="question-container">
+          <div class="question" id="question">—</div>
+        </div>
+
+        <div class="hint" id="hint">Indice prêt.</div>
+
+        <div class="answer-area" id="answer-area">
+          <input id="answer-input" type="number" inputmode="numeric" placeholder="?" autofocus />
+          <button class="primary" id="check-btn">Valider</button>
+        </div>
+
+        <div class="choices-area" id="choices-area" hidden>
+          <!-- Buttons injected by JS -->
+        </div>
+
+        <p class="feedback" id="feedback"></p>
+      </div>
+
+      <div class="summary-card" id="summary-card" hidden>
+        <h3>Bilan de séance</h3>
+        <div class="summary-metrics">
+          <div class="summary-metric">
+            <span class="metric-label">Score</span>
+            <strong id="summary-score">0 / 0</strong>
+          </div>
+          <div class="summary-metric">
+            <span class="metric-label">XP Gagné</span>
+            <strong id="summary-xp" style="color: var(--accent)">+0 XP</strong>
+          </div>
+        </div>
+        <div class="summary-actions">
+          <button class="primary" id="summary-retry-btn">Rejouer</button>
+          <button class="ghost" id="summary-tips-btn">Voir les astuces</button>
+          <button class="secondary" id="summary-close-btn">Menu</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+
 </html>
