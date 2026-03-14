@@ -83,6 +83,15 @@ function usesTouchKeyboardSubmit() {
     (touchPoints > 1 && window.innerWidth <= 1024);
 }
 
+function focusAnswerInput() {
+  if (usesTouchKeyboardSubmit() || state.questionMode === "flash") {
+    return;
+  }
+  requestAnimationFrame(() => {
+    elements.answerInput.focus();
+  });
+}
+
 function initProgress() {
   const stored = localStorage.getItem(storageKey);
   if (stored) {
@@ -582,6 +591,7 @@ function nextQuestion() {
     startFlashTimer();
   } else {
     startQuestionTimer();
+    focusAnswerInput();
   }
 }
 
@@ -799,6 +809,9 @@ elements.answerForm.addEventListener("submit", (event) => {
 elements.answerInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter" && !usesTouchKeyboardSubmit()) {
     event.preventDefault();
+    if (checkAnswer()) {
+      nextQuestion();
+    }
   }
 });
 
