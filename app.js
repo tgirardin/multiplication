@@ -50,7 +50,8 @@ const elements = {
   progressFill: document.getElementById("progress-fill"),
   question: document.getElementById("question"),
   hint: document.getElementById("hint"),
-  answerArea: document.getElementById("answer-area"),
+  answerForm: document.getElementById("answer-form"),
+  answerArea: document.getElementById("answer-form"),
   answerInput: document.getElementById("answer-input"),
   checkBtn: document.getElementById("check-btn"),
   revealBtn: document.getElementById("reveal-btn"),
@@ -75,6 +76,12 @@ const elements = {
   accuracy: document.getElementById("accuracy"),
   toast: document.getElementById("toast"),
 };
+
+function usesTouchKeyboardSubmit() {
+  const touchPoints = navigator.maxTouchPoints || 0;
+  return window.matchMedia("(hover: none) and (pointer: coarse)").matches ||
+    (touchPoints > 1 && window.innerWidth <= 1024);
+}
 
 function initProgress() {
   const stored = localStorage.getItem(storageKey);
@@ -773,20 +780,25 @@ elements.selectAll.addEventListener("click", () => selectTables(tables));
 elements.selectNone.addEventListener("click", () => selectTables([]));
 elements.selectCore.addEventListener("click", () => selectTables([2, 3, 4, 5, 6]));
 
-elements.checkBtn.addEventListener("click", () => {
+elements.revealBtn.addEventListener("click", revealAnswer);
+elements.nextBtn.addEventListener("click", nextQuestion);
+
+elements.answerForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const isButtonSubmit = event.submitter
+    ? event.submitter === elements.checkBtn
+    : document.activeElement === elements.checkBtn;
+  if (!isButtonSubmit && !usesTouchKeyboardSubmit()) {
+    return;
+  }
   if (checkAnswer()) {
     nextQuestion();
   }
 });
 
-elements.revealBtn.addEventListener("click", revealAnswer);
-elements.nextBtn.addEventListener("click", nextQuestion);
-
 elements.answerInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    if (checkAnswer()) {
-      nextQuestion();
-    }
+  if (event.key === "Enter" && !usesTouchKeyboardSubmit()) {
+    event.preventDefault();
   }
 });
 

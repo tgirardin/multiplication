@@ -140,11 +140,17 @@
           </div>
           <div class="question" id="question">—</div>
           <div class="hint" id="hint">Indice prêt.</div>
-          <div class="answer-area" id="answer-area">
-            <input id="answer-input" type="number" inputmode="numeric" placeholder="Votre réponse" />
-            <button class="primary" id="check-btn">Valider</button>
-            <button class="ghost" id="reveal-btn">Révéler</button>
-          </div>
+          <form class="answer-area" id="answer-form">
+            <input
+              id="answer-input"
+              type="number"
+              inputmode="numeric"
+              enterkeyhint="done"
+              placeholder="Votre réponse"
+            />
+            <button class="primary" id="check-btn" type="submit">Valider</button>
+            <button class="ghost" id="reveal-btn" type="button">Révéler</button>
+          </form>
           <div class="choices" id="choices" aria-label="Choix multiples"></div>
           <p class="feedback" id="feedback"></p>
           <button class="ghost" id="next-btn">Question suivante</button>
