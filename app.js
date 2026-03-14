@@ -51,7 +51,10 @@ const elements = {
   question: document.getElementById("question"),
   hint: document.getElementById("hint"),
   answerForm: document.getElementById("answer-form"),
-  answerArea: document.getElementById("answer-form"),
+  answerArea:
+    document.getElementById("answer-form") ||
+    document.getElementById("answer-area") ||
+    document.getElementById("answer-input")?.closest(".answer-area"),
   answerInput: document.getElementById("answer-input"),
   checkBtn: document.getElementById("check-btn"),
   revealBtn: document.getElementById("reveal-btn"),
@@ -539,12 +542,23 @@ function setMode(mode) {
 }
 
 function setModeUI(mode = state.mode) {
+  const answerArea =
+    elements.answerArea || elements.answerInput?.closest(".answer-area");
+  const choices = elements.choices || document.getElementById("choices");
   if (mode === "flash") {
-    elements.answerArea.style.display = "none";
-    elements.choices.style.display = "flex";
+    if (answerArea) {
+      answerArea.style.display = "none";
+    }
+    if (choices) {
+      choices.style.display = "flex";
+    }
   } else {
-    elements.answerArea.style.display = "flex";
-    elements.choices.style.display = "none";
+    if (answerArea) {
+      answerArea.style.display = "flex";
+    }
+    if (choices) {
+      choices.style.display = "none";
+    }
   }
 }
 
@@ -793,18 +807,26 @@ elements.selectCore.addEventListener("click", () => selectTables([2, 3, 4, 5, 6]
 elements.revealBtn.addEventListener("click", revealAnswer);
 elements.nextBtn.addEventListener("click", nextQuestion);
 
-elements.answerForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const isButtonSubmit = event.submitter
-    ? event.submitter === elements.checkBtn
-    : document.activeElement === elements.checkBtn;
-  if (!isButtonSubmit && !usesTouchKeyboardSubmit()) {
-    return;
-  }
-  if (checkAnswer()) {
-    nextQuestion();
-  }
-});
+if (elements.answerForm && elements.answerForm.tagName === "FORM") {
+  elements.answerForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const isButtonSubmit = event.submitter
+      ? event.submitter === elements.checkBtn
+      : document.activeElement === elements.checkBtn;
+    if (!isButtonSubmit && !usesTouchKeyboardSubmit()) {
+      return;
+    }
+    if (checkAnswer()) {
+      nextQuestion();
+    }
+  });
+} else {
+  elements.checkBtn.addEventListener("click", () => {
+    if (checkAnswer()) {
+      nextQuestion();
+    }
+  });
+}
 
 elements.answerInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter" && !usesTouchKeyboardSubmit()) {
