@@ -4,11 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MÉMOx9 — Tables de multiplication</title>
-    <link rel="stylesheet" href="styles.css?v=20260314-2236" />
+    <script>
+      window.MEMOX9_VERSION = {
+        label: "14-03-2026 22:55",
+        token: "20260314-2255",
+      };
+
+      const stylesheet = document.createElement("link");
+      stylesheet.rel = "stylesheet";
+      stylesheet.href = `styles.css?v=${window.MEMOX9_VERSION.token}`;
+      document.head.appendChild(stylesheet);
+    </script>
   </head>
   <body data-view="config">
     <div class="bg-lines" aria-hidden="true"></div>
     <main class="page">
+      <div class="version-badge" id="version-badge" aria-label="Version de l'application"></div>
       <div id="config-view">
         <header class="hero">
           <div>
@@ -184,6 +195,15 @@
     </main>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="app.js?v=20260314-2236"></script>
+    <script>
+      const versionBadge = document.getElementById("version-badge");
+      if (versionBadge) {
+        versionBadge.textContent = `v ${window.MEMOX9_VERSION.label}`;
+      }
+
+      const appScript = document.createElement("script");
+      appScript.src = `app.js?v=${window.MEMOX9_VERSION.token}`;
+      document.body.appendChild(appScript);
+    </script>
   </body>
 </html>

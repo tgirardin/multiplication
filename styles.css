@@ -28,6 +28,24 @@ body {
   overflow-x: hidden;
 }
 
+.version-badge {
+  position: absolute;
+  top: 12px;
+  left: 24px;
+  z-index: 2;
+  padding: 6px 10px;
+  border: 1px solid rgba(28, 34, 38, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.68);
+  color: rgba(28, 34, 38, 0.62);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 20px rgba(28, 34, 38, 0.06);
+  pointer-events: none;
+}
+
 .bg-lines {
   position: fixed;
   inset: 0;
@@ -43,6 +61,7 @@ body {
   max-width: 1120px;
   margin: 0 auto;
   padding: 48px 24px 80px;
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 32px;
@@ -583,6 +602,13 @@ h1 {
 @media (max-width: 640px) {
   .page {
     padding: 32px 18px 60px;
+  }
+
+  .version-badge {
+    top: 10px;
+    left: 18px;
+    padding: 5px 8px;
+    font-size: 0.68rem;
   }
 
   .mastery-grid {
