@@ -3,207 +3,278 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MÉMOx9 — Tables de multiplication</title>
-    <script>
-      window.MEMOX9_VERSION = {
-        label: "14-03-2026 22:55",
-        token: "20260314-2255",
-      };
-
-      const stylesheet = document.createElement("link");
-      stylesheet.rel = "stylesheet";
-      stylesheet.href = `styles.css?v=${window.MEMOX9_VERSION.token}`;
-      document.head.appendChild(stylesheet);
-    </script>
+    <title>MÉMOx9</title>
+    <link rel="icon" href="data:," />
+    <script src="boot.js"></script>
   </head>
-  <body data-view="config">
+  <body data-screen="config">
     <div class="bg-lines" aria-hidden="true"></div>
-    <main class="page">
-      <div class="version-badge" id="version-badge" aria-label="Version de l'application"></div>
-      <div id="config-view">
-        <header class="hero">
-          <div>
-            <p class="eyebrow">Apprentissage structuré</p>
-            <h1>MÉMOx9</h1>
-            <p class="subtitle">
-              Une méthode sérieuse et épurée pour ancrer les tables de 1 à 9 par
-              coeur, avec un rythme intelligent et mesuré.
-            </p>
-          </div>
-          <div class="hero-card">
-            <div class="metric">
-              <span class="metric-label">Maîtrise moyenne</span>
-              <span class="metric-value" id="mastery-global">0%</span>
-            </div>
-            <div class="metric">
-              <span class="metric-label">Série actuelle</span>
-              <span class="metric-value" id="streak">0</span>
-            </div>
-            <div class="metric">
-              <span class="metric-label">Exactitude</span>
-              <span class="metric-value" id="accuracy">0%</span>
-            </div>
-          </div>
-        </header>
 
-        <section class="panel">
-          <div class="panel-title">
-            <h2>Configuration de session</h2>
-            <p>Choisissez les tables, le mode, puis lancez la séance.</p>
-          </div>
-          <div class="panel-grid">
-            <div class="block">
-              <h3>Tables</h3>
-              <div class="table-grid" id="table-grid" role="group" aria-label="Tables"></div>
-              <div class="quick-actions">
-                <button class="ghost" id="select-all">Tout</button>
-                <button class="ghost" id="select-none">Aucun</button>
-                <button class="ghost" id="select-core">2–6</button>
+    <div class="app-frame">
+      <header class="topbar">
+        <strong class="brand-mark">MÉMOx9</strong>
+        <span class="brand-note">QCM tables 1 à 9</span>
+      </header>
+
+      <main class="app-shell">
+        <section class="screen screen-config is-active" id="config-screen" aria-hidden="false">
+          <section class="panel config-panel">
+            <div class="panel-head compact-head">
+              <div>
+                <h1>Préparer la séance</h1>
+                <p>Réglages compacts, puis passage fluide vers le jeu plein écran.</p>
               </div>
             </div>
-            <div class="block">
-              <h3>Mode</h3>
-              <div class="modes">
-                <label class="mode-option">
-                  <input type="radio" name="mode" value="recall" checked />
-                  <span>Rappel actif</span>
-                </label>
-                <label class="mode-option">
-                  <input type="radio" name="mode" value="flash" />
-                  <span>Choix multiples</span>
-                </label>
-                <label class="mode-option">
-                  <input type="radio" name="mode" value="mix" />
-                  <span>Mélange stratégique</span>
-                </label>
-                <label class="mode-option">
-                  <input type="radio" name="mode" value="targeted" />
-                  <span>Révision ciblée (2 tables faibles)</span>
-                </label>
-              </div>
-              <div class="field">
-                <label for="question-count">Questions</label>
-                <input id="question-count" type="range" min="10" max="36" value="18" />
-                <span id="question-count-value">18</span>
-              </div>
-              <div class="field">
-                <label for="flash-delay">Vitesse flash (sec.)</label>
-                <input id="flash-delay" type="range" min="3" max="10" value="6" />
-                <span id="flash-delay-value">6</span>
-              </div>
-              <div class="field">
-                <label for="time-limit">Temps par question (sec.)</label>
-                <input id="time-limit" type="range" min="4" max="20" value="8" />
-                <span id="time-limit-value">8</span>
-              </div>
-              <label class="toggle">
-                <input id="auto-hint" type="checkbox" checked />
-                <span>Indice automatique après 5 sec.</span>
-              </label>
+
+            <div class="config-grid">
+              <section class="config-card settings-card">
+                <div class="config-title-row">
+                  <h2>Réglages</h2>
+                  <span class="help-wrap">
+                    <button class="help-trigger" type="button" aria-label="Aide sur les réglages" aria-expanded="false">?</button>
+                    <span class="help-popover">
+                      Sur Mac, privilégie des séances courtes et un délai discret pour garder tout visible. Sur téléphone,
+                      baisse le nombre de questions et garde un peu plus de temps total.
+                    </span>
+                  </span>
+                </div>
+
+                <div class="control-group">
+                  <div class="label-row">
+                    <span>Mode</span>
+                    <span class="help-wrap">
+                      <button class="help-trigger" type="button" aria-label="Aide sur le mode" aria-expanded="false">?</button>
+                      <span class="help-popover">
+                        Choix multiple utilise les tables cochées. Révision ciblée sélectionne automatiquement les 2 tables les plus fragiles.
+                      </span>
+                    </span>
+                  </div>
+                  <div class="modes compact-modes">
+                    <label class="mode-option">
+                      <input id="mode-choice" type="radio" name="mode" value="choice" checked />
+                      <span>Choix multiple</span>
+                    </label>
+                    <label class="mode-option">
+                      <input id="mode-targeted" type="radio" name="mode" value="targeted" />
+                      <span>Révision ciblée</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <div class="label-row">
+                    <label for="question-count">Questions</label>
+                    <span class="help-wrap">
+                      <button class="help-trigger" type="button" aria-label="Aide sur le nombre de questions" aria-expanded="false">?</button>
+                      <span class="help-popover">
+                        10 à 14 pour une série rapide. 15 à 20 pour une séance solide. Au-delà, la partie devient plus longue et plus dense.
+                      </span>
+                    </span>
+                  </div>
+                  <div class="field compact-field">
+                    <input id="question-count" type="range" min="10" max="30" value="16" />
+                    <span id="question-count-value">16</span>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <div class="label-row">
+                    <label for="choice-delay">Délai avant choix</label>
+                    <span class="help-wrap">
+                      <button class="help-trigger" type="button" aria-label="Aide sur le délai avant choix" aria-expanded="false">?</button>
+                      <span class="help-popover">
+                        Le chronomètre démarre tout de suite. Ce délai laisse un temps de calcul mental avant l'apparition des réponses.
+                      </span>
+                    </span>
+                  </div>
+                  <div class="field compact-field">
+                    <input id="choice-delay" type="range" min="0" max="6" value="2" />
+                    <span id="choice-delay-value">2 s</span>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <div class="label-row">
+                    <label for="time-limit">Temps total</label>
+                    <span class="help-wrap">
+                      <button class="help-trigger" type="button" aria-label="Aide sur le temps total" aria-expanded="false">?</button>
+                      <span class="help-popover">
+                        Ce temps inclut la réflexion puis le clic. Garde toujours au moins 2 secondes de plus que le délai avant choix.
+                      </span>
+                    </span>
+                  </div>
+                  <div class="field compact-field">
+                    <input id="time-limit" type="range" min="4" max="14" value="7" />
+                    <span id="time-limit-value">7 s</span>
+                  </div>
+                </div>
+              </section>
+
+              <section class="config-card tables-card" id="tables-card">
+                <div class="config-title-row">
+                  <h2>Tables</h2>
+                  <span class="help-wrap">
+                    <button class="help-trigger" type="button" aria-label="Aide sur les tables" aria-expanded="false">?</button>
+                    <span class="help-popover">
+                      En mode classique, coche 3 à 5 tables pour garder des séries rapides et lisibles. En mode ciblé, cette zone devient seulement informative.
+                    </span>
+                  </span>
+                </div>
+
+                <div class="table-grid" id="table-grid" role="group" aria-label="Tables"></div>
+
+                <div class="quick-actions compact-actions">
+                  <button class="ghost" id="select-all" type="button">Tout</button>
+                  <button class="ghost" id="select-none" type="button">Aucun</button>
+                  <button class="ghost" id="select-core" type="button">2-6</button>
+                </div>
+
+                <p class="selection-note" id="selection-note"></p>
+              </section>
             </div>
-            <div class="block focus-block">
-              <h3>Session focus</h3>
-              <p class="focus-text">
-                Le moteur adapte la fréquence des tables selon votre maîtrise pour
-                renforcer les zones faibles sans lassitude!
-              </p>
-              <button class="primary" id="start-btn">Démarrer la séance</button>
-              <button class="secondary" id="reset-btn">Réinitialiser les progrès</button>
+
+            <div class="launch-row">
+              <p class="launch-inline" id="launch-inline">Le jeu prendra tout l'écran au démarrage.</p>
+              <div class="primary-actions">
+                <button class="primary" id="start-btn" type="button">Lancer la séance</button>
+                <button class="ghost" id="reset-btn" type="button">Réinitialiser les progrès</button>
+              </div>
             </div>
-          </div>
+          </section>
         </section>
 
-        <section class="panel">
-          <div class="panel-title">
-            <h2>Maîtrise par table</h2>
-            <p>Suivi détaillé pour garder une progression visible et motivante.</p>
-          </div>
-          <div class="mastery-grid" id="mastery-grid"></div>
+        <section class="screen screen-play" id="play-screen" aria-hidden="true">
+          <section class="play-stage">
+            <div class="play-topbar">
+              <div>
+                <p class="play-kicker" id="play-kicker">Séance en cours</p>
+                <p class="play-meta" id="session-meta">Question 1 sur 1</p>
+              </div>
+              <button class="ghost compact" id="stop-btn" type="button">Arrêter</button>
+            </div>
+
+            <div class="play-status-row">
+              <div class="status-chip">
+                <span class="status-chip-label">Progression</span>
+                <strong id="progress-label">1 / 1</strong>
+              </div>
+              <div class="play-progress-group">
+                <span class="play-progress-caption">Avancement de la séance</span>
+                <div class="progress-track progress-track-session">
+                  <div class="progress-fill" id="progress-fill"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="play-center">
+              <div class="play-problem">
+                <div class="play-question" id="question">—</div>
+                <p class="choice-stage" id="choice-stage">Les réponses apparaîtront ici.</p>
+              </div>
+
+              <div class="play-deck">
+                <div class="timer-block" aria-hidden="true">
+                  <span class="timer-label">Temps restant pour répondre</span>
+                  <div class="timer play-timer">
+                    <div class="timer-bar" id="timer-bar"></div>
+                  </div>
+                </div>
+
+                <div class="choices play-choices" id="choices" aria-label="Choix multiples"></div>
+              </div>
+
+              <p class="feedback" id="feedback"></p>
+            </div>
+          </section>
         </section>
 
-        <section class="panel">
-          <div class="panel-title">
-            <h2>Progression jour par jour</h2>
-            <p>Historique local des séances pour visualiser vos habitudes.</p>
+        <section class="screen screen-results" id="results-screen" aria-hidden="true">
+          <div class="results-scroll">
+            <section class="panel result-panel">
+              <div class="panel-head compact-head">
+                <div>
+                  <h1 id="results-title">Résultats</h1>
+                  <p id="results-subtitle">La séance vient de se terminer.</p>
+                </div>
+              </div>
+
+              <div class="summary-metrics">
+                <article class="summary-metric">
+                  <span class="metric-label">Score</span>
+                  <strong id="summary-score">0 / 0</strong>
+                </article>
+                <article class="summary-metric">
+                  <span class="metric-label">Exactitude</span>
+                  <strong id="summary-accuracy">0%</strong>
+                </article>
+                <article class="summary-metric">
+                  <span class="metric-label">Meilleure série</span>
+                  <strong id="summary-best-streak">0</strong>
+                </article>
+              </div>
+
+              <p class="summary-weak" id="summary-weak">Tables à renforcer: —</p>
+              <p class="summary-reco" id="summary-reco">Conseil: —</p>
+
+              <div class="result-actions">
+                <button class="primary" id="summary-retry-btn" type="button">Refaire la séance</button>
+                <button class="secondary" id="summary-target-btn" type="button">Révision ciblée</button>
+                <button class="ghost" id="back-config-btn" type="button">Retour réglages</button>
+              </div>
+            </section>
+
+            <section class="panel stats-panel">
+              <div class="panel-head compact-head">
+                <div>
+                  <h2>Statistiques globales</h2>
+                  <p>Les infos d'ensemble sont volontairement rangées ici, après la partie.</p>
+                </div>
+              </div>
+
+              <div class="hero-stats bottom-stats">
+                <article class="metric-card">
+                  <span class="metric-label">Maîtrise moyenne</span>
+                  <strong class="metric-value" id="mastery-global">0%</strong>
+                </article>
+                <article class="metric-card">
+                  <span class="metric-label">Meilleure série</span>
+                  <strong class="metric-value" id="best-streak-global">0</strong>
+                </article>
+                <article class="metric-card">
+                  <span class="metric-label">Dernière exactitude</span>
+                  <strong class="metric-value" id="accuracy-global">0%</strong>
+                </article>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head compact-head">
+                <div>
+                  <h2>Maîtrise par table</h2>
+                  <p>Vue détaillée des acquis après la séance.</p>
+                </div>
+              </div>
+              <div class="mastery-grid" id="mastery-grid"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head compact-head">
+                <div>
+                  <h2>Progression jour par jour</h2>
+                  <p>Historique local des séances terminées ou interrompues.</p>
+                </div>
+              </div>
+              <div class="history-list" id="history-list"></div>
+            </section>
           </div>
-          <div class="history-list" id="history-list"></div>
         </section>
-      </div>
+      </main>
 
-      <section class="panel session-panel view-hidden" id="session-view" hidden>
-        <div class="session-header">
-          <div>
-            <h2>Exercice en cours</h2>
-            <p id="session-meta">Prêt à commencer.</p>
-          </div>
-          <div class="progress">
-            <span id="progress-label">0 / 0</span>
-            <div class="progress-track">
-              <div class="progress-fill" id="progress-fill"></div>
-            </div>
-          </div>
-          <button class="ghost" id="stop-btn">Arrêter la session</button>
-        </div>
+      <footer class="dev-footer">
+        <span class="version-badge" id="version-badge" aria-label="Version de l'application"></span>
+      </footer>
+    </div>
 
-        <div class="practice-card" id="practice-card">
-          <div class="timer" id="timer">
-            <div class="timer-bar" id="timer-bar"></div>
-          </div>
-          <div class="question" id="question">—</div>
-          <div class="hint" id="hint">Indice prêt.</div>
-          <form class="answer-area" id="answer-form">
-            <input
-              id="answer-input"
-              type="number"
-              inputmode="numeric"
-              enterkeyhint="done"
-              placeholder="Votre réponse"
-            />
-            <button class="primary" id="check-btn" type="submit">Valider</button>
-            <button class="ghost" id="reveal-btn" type="button">Révéler</button>
-          </form>
-          <div class="choices" id="choices" aria-label="Choix multiples"></div>
-          <p class="feedback" id="feedback"></p>
-          <button class="ghost" id="next-btn">Question suivante</button>
-        </div>
-
-        <div class="summary-card" id="summary-card" hidden>
-          <h3>Bilan de séance</h3>
-          <div class="summary-metrics">
-            <div class="summary-metric">
-              <span class="metric-label">Score</span>
-              <strong id="summary-score">0 / 0</strong>
-            </div>
-            <div class="summary-metric">
-              <span class="metric-label">Exactitude</span>
-              <strong id="summary-accuracy">0%</strong>
-            </div>
-            <div class="summary-metric">
-              <span class="metric-label">Meilleure série</span>
-              <strong id="summary-best-streak">0</strong>
-            </div>
-          </div>
-          <p class="summary-weak" id="summary-weak">Tables à renforcer: —</p>
-          <p class="summary-reco" id="summary-reco">Conseil: —</p>
-          <div class="summary-actions">
-            <button class="primary" id="summary-retry-btn">Refaire la séance</button>
-            <button class="ghost" id="summary-target-btn">Révision ciblée auto</button>
-            <button class="secondary" id="summary-close-btn">Retour à l'accueil</button>
-          </div>
-        </div>
-      </section>
-    </main>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-    <script>
-      const versionBadge = document.getElementById("version-badge");
-      if (versionBadge) {
-        versionBadge.textContent = `v ${window.MEMOX9_VERSION.label}`;
-      }
-
-      const appScript = document.createElement("script");
-      appScript.src = `app.js?v=${window.MEMOX9_VERSION.token}`;
-      document.body.appendChild(appScript);
-    </script>
   </body>
 </html>

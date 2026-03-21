@@ -1,0 +1,194 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - strong [ref=e4]: MÉMOx9
+      - generic [ref=e5]: QCM tables 1 à 9
+    - main [ref=e6]:
+      - generic [ref=e8]:
+        - generic [ref=e10]:
+          - heading "Préparer la séance" [level=1] [ref=e11]
+          - paragraph [ref=e12]: Réglages compacts, puis passage fluide vers le jeu plein écran.
+        - generic [ref=e13]:
+          - generic [ref=e14]:
+            - generic [ref=e15]:
+              - heading "Réglages" [level=2] [ref=e16]
+              - generic [ref=e17]:
+                - button "Aide sur les réglages" [ref=e18] [cursor=pointer]: "?"
+                - generic: Sur Mac, privilégie des séances courtes et un délai discret pour garder tout visible. Sur téléphone, baisse le nombre de questions et garde un peu plus de temps total.
+            - generic [ref=e19]:
+              - generic [ref=e20]:
+                - generic [ref=e21]: Mode
+                - generic [ref=e22]:
+                  - button "Aide sur le mode" [ref=e23] [cursor=pointer]: "?"
+                  - generic: Choix multiple utilise les tables cochées. Révision ciblée sélectionne automatiquement les 2 tables les plus fragiles.
+              - generic [ref=e24]:
+                - generic [ref=e25] [cursor=pointer]:
+                  - radio "Choix multiple" [checked] [ref=e26]
+                  - generic [ref=e27]: Choix multiple
+                - generic [ref=e28] [cursor=pointer]:
+                  - radio "Révision ciblée" [ref=e29]
+                  - generic [ref=e30]: Révision ciblée
+            - generic [ref=e31]:
+              - generic [ref=e32]:
+                - generic [ref=e33]: Questions
+                - generic [ref=e34]:
+                  - button "Aide sur le nombre de questions" [ref=e35] [cursor=pointer]: "?"
+                  - generic: 10 à 14 pour une série rapide. 15 à 20 pour une séance solide. Au-delà, la partie devient plus longue et plus dense.
+              - generic [ref=e36]:
+                - slider "Questions" [ref=e37]: "16"
+                - generic [ref=e38]: "16"
+            - generic [ref=e39]:
+              - generic [ref=e40]:
+                - generic [ref=e41]: Délai avant choix
+                - generic [ref=e42]:
+                  - button "Aide sur le délai avant choix" [ref=e43] [cursor=pointer]: "?"
+                  - generic: Le chronomètre démarre tout de suite. Ce délai laisse un temps de calcul mental avant l'apparition des réponses.
+              - generic [ref=e44]:
+                - slider "Délai avant choix" [ref=e45]: "2"
+                - generic [ref=e46]: 2 s
+            - generic [ref=e47]:
+              - generic [ref=e48]:
+                - generic [ref=e49]: Temps total
+                - generic [ref=e50]:
+                  - button "Aide sur le temps total" [ref=e51] [cursor=pointer]: "?"
+                  - generic: Ce temps inclut la réflexion puis le clic. Garde toujours au moins 2 secondes de plus que le délai avant choix.
+              - generic [ref=e52]:
+                - slider "Temps total" [ref=e53]: "7"
+                - generic [ref=e54]: 7 s
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - heading "Tables" [level=2] [ref=e57]
+              - generic [ref=e58]:
+                - button "Aide sur les tables" [ref=e59] [cursor=pointer]: "?"
+                - generic: En mode classique, coche 3 à 5 tables pour garder des séries rapides et lisibles. En mode ciblé, cette zone devient seulement informative.
+            - group "Tables" [ref=e60]:
+              - button "Table 1" [ref=e61] [cursor=pointer]
+              - button "Table 2" [ref=e62] [cursor=pointer]
+              - button "Table 3" [ref=e63] [cursor=pointer]
+              - button "Table 4" [ref=e64] [cursor=pointer]
+              - button "Table 5" [ref=e65] [cursor=pointer]
+              - button "Table 6" [ref=e66] [cursor=pointer]
+              - button "Table 7" [ref=e67] [cursor=pointer]
+              - button "Table 8" [ref=e68] [cursor=pointer]
+              - button "Table 9" [ref=e69] [cursor=pointer]
+            - generic [ref=e70]:
+              - button "Tout" [ref=e71] [cursor=pointer]
+              - button "Aucun" [ref=e72] [cursor=pointer]
+              - button "2-6" [ref=e73] [cursor=pointer]
+            - paragraph [ref=e74]: "Tables actives: 2, 3, 4, 5, 6."
+        - generic [ref=e75]:
+          - paragraph [ref=e76]: Le jeu prendra tout l'écran au démarrage.
+          - generic [ref=e77]:
+            - button "Lancer la séance" [ref=e78] [cursor=pointer]
+            - button "Réinitialiser les progrès" [ref=e79] [cursor=pointer]
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - paragraph: Séance en cours
+              - paragraph: Question 1 sur 1
+            - button: Arrêter
+          - generic:
+            - generic:
+              - generic: Progression
+              - strong: 1 / 1
+            - generic:
+              - generic: Avancement de la séance
+          - generic:
+            - generic:
+              - generic: —
+              - paragraph: Les réponses apparaîtront ici.
+            - generic:
+              - generic:
+                - generic: Temps restant pour répondre
+            - paragraph
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=1]: Résultats
+                - paragraph: Lance une séance pour obtenir un bilan détaillé.
+            - generic:
+              - article:
+                - generic: Score
+                - strong: 0 / 0
+              - article:
+                - generic: Exactitude
+                - strong: 0%
+              - article:
+                - generic: Meilleure série
+                - strong: "0"
+            - paragraph: "Tables à renforcer: —"
+            - paragraph: "Conseil: Lance une première série pour créer une base de progression."
+            - generic:
+              - button: Refaire la séance
+              - button: Révision ciblée
+              - button: Retour réglages
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=2]: Statistiques globales
+                - paragraph: Les infos d'ensemble sont volontairement rangées ici, après la partie.
+            - generic:
+              - article:
+                - generic: Maîtrise moyenne
+                - strong: 0%
+              - article:
+                - generic: Meilleure série
+                - strong: "0"
+              - article:
+                - generic: Dernière exactitude
+                - strong: 0%
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=2]: Maîtrise par table
+                - paragraph: Vue détaillée des acquis après la séance.
+            - generic:
+              - article:
+                - strong: Table 1
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 2
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 3
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 4
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 5
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 6
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 7
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 8
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 9
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=2]: Progression jour par jour
+                - paragraph: Historique local des séances terminées ou interrompues.
+            - generic:
+              - paragraph: Aucune séance enregistrée pour le moment.
+    - contentinfo [ref=e80]:
+      - generic "Version de l'application" [ref=e81]: v 21-03-2026 02:25
+  - status

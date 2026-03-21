@@ -1,0 +1,132 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic "Version de l'application": v 20-03-2026 23:55
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - paragraph [ref=e5]: QCM rapide et ciblé
+        - heading "MÉMOx9" [level=1] [ref=e6]
+        - paragraph [ref=e7]: "Un entraînement plus fluide: tout se joue au clic ou au toucher, avec un court temps de réflexion avant que les réponses apparaissent."
+      - generic [ref=e8]:
+        - generic [ref=e9]:
+          - generic [ref=e10]: Maîtrise moyenne
+          - generic [ref=e11]: 0%
+        - generic [ref=e12]:
+          - generic [ref=e13]: Série actuelle
+          - generic [ref=e14]: "0"
+        - generic [ref=e15]:
+          - generic [ref=e16]: Exactitude
+          - generic [ref=e17]: 0%
+    - generic [ref=e18]:
+      - generic [ref=e20]:
+        - heading "Jeu et contrôles" [level=2] [ref=e21]
+        - paragraph [ref=e22]: Tout tient ici sur Mac. Sur téléphone, l'interface se replie naturellement.
+      - generic [ref=e23]:
+        - complementary [ref=e24]:
+          - generic [ref=e25]:
+            - generic [ref=e26]:
+              - heading "Tables" [level=3] [ref=e27]
+              - paragraph [ref=e28]: Choisissez vos tables ou laissez la révision ciblée sélectionner les 2 plus faibles.
+            - group "Tables" [ref=e29]:
+              - button "Table 1" [ref=e30] [cursor=pointer]
+              - button "Table 2" [ref=e31] [cursor=pointer]
+              - button "Table 3" [ref=e32] [cursor=pointer]
+              - button "Table 4" [ref=e33] [cursor=pointer]
+              - button "Table 5" [ref=e34] [cursor=pointer]
+              - button "Table 6" [ref=e35] [cursor=pointer]
+              - button "Table 7" [ref=e36] [cursor=pointer]
+              - button "Table 8" [ref=e37] [cursor=pointer]
+              - button "Table 9" [ref=e38] [cursor=pointer]
+            - generic [ref=e39]:
+              - button "Tout" [ref=e40] [cursor=pointer]
+              - button "Aucun" [ref=e41] [cursor=pointer]
+              - button "2–6" [ref=e42] [cursor=pointer]
+          - generic [ref=e43]:
+            - generic [ref=e44]:
+              - heading "Mode" [level=3] [ref=e45]
+              - paragraph [ref=e46]: QCM classique sur les tables choisies.
+            - generic [ref=e47]:
+              - generic [ref=e48] [cursor=pointer]:
+                - radio "Choix multiple" [checked] [ref=e49]
+                - generic [ref=e50]: Choix multiple
+              - generic [ref=e51] [cursor=pointer]:
+                - radio "Révision ciblée" [ref=e52]
+                - generic [ref=e53]: Révision ciblée
+          - generic [ref=e54]:
+            - generic [ref=e55]:
+              - heading "Réglages" [level=3] [ref=e56]
+              - paragraph [ref=e57]: Le temps total démarre tout de suite. Les choix arrivent plus tard.
+            - generic [ref=e58]:
+              - generic [ref=e59]: Questions
+              - slider "Questions" [ref=e60]: "18"
+              - generic [ref=e61]: "18"
+            - generic [ref=e62]:
+              - generic [ref=e63]: Délai avant choix (sec.)
+              - slider "Délai avant choix (sec.)" [ref=e64]: "2"
+              - generic [ref=e65]: "2"
+            - generic [ref=e66]:
+              - generic [ref=e67]: Temps total (sec.)
+              - slider "Temps total (sec.)" [ref=e68]: "7"
+              - generic [ref=e69]: "7"
+          - generic [ref=e70]:
+            - button "Lancer la séance" [ref=e71] [cursor=pointer]
+            - button "Révision ciblée auto" [ref=e72] [cursor=pointer]
+            - button "Réinitialiser les progrès" [ref=e73] [cursor=pointer]
+        - generic [ref=e74]:
+          - generic [ref=e75]:
+            - generic [ref=e76]:
+              - paragraph [ref=e77]: Prêt à démarrer.
+              - generic [ref=e78]: Choisis tes tables puis lance une séance.
+              - paragraph [ref=e79]: Les réponses apparaîtront après le délai choisi, pour laisser le temps de chercher de tête.
+            - generic [ref=e80]:
+              - generic [ref=e81]: 0 / 0
+              - button "Arrêter" [disabled] [ref=e83]
+          - generic [ref=e85]: "QCM uniquement: les réponses apparaissent ici."
+          - generic "Choix multiples" [ref=e86]
+          - paragraph [ref=e87]
+    - generic [ref=e88]:
+      - generic [ref=e90]:
+        - heading "Maîtrise par table" [level=2] [ref=e91]
+        - paragraph [ref=e92]: Vue rapide pour repérer les tables vraiment solides et celles à retravailler.
+      - generic [ref=e93]:
+        - article [ref=e94]:
+          - strong [ref=e95]: Table 1
+          - generic [ref=e96]: 0 / 0 réussites
+          - generic [ref=e98]: 0% de maîtrise
+        - article [ref=e99]:
+          - strong [ref=e100]: Table 2
+          - generic [ref=e101]: 0 / 0 réussites
+          - generic [ref=e103]: 0% de maîtrise
+        - article [ref=e104]:
+          - strong [ref=e105]: Table 3
+          - generic [ref=e106]: 0 / 0 réussites
+          - generic [ref=e108]: 0% de maîtrise
+        - article [ref=e109]:
+          - strong [ref=e110]: Table 4
+          - generic [ref=e111]: 0 / 0 réussites
+          - generic [ref=e113]: 0% de maîtrise
+        - article [ref=e114]:
+          - strong [ref=e115]: Table 5
+          - generic [ref=e116]: 0 / 0 réussites
+          - generic [ref=e118]: 0% de maîtrise
+        - article [ref=e119]:
+          - strong [ref=e120]: Table 6
+          - generic [ref=e121]: 0 / 0 réussites
+          - generic [ref=e123]: 0% de maîtrise
+        - article [ref=e124]:
+          - strong [ref=e125]: Table 7
+          - generic [ref=e126]: 0 / 0 réussites
+          - generic [ref=e128]: 0% de maîtrise
+        - article [ref=e129]:
+          - strong [ref=e130]: Table 8
+          - generic [ref=e131]: 0 / 0 réussites
+          - generic [ref=e133]: 0% de maîtrise
+        - article [ref=e134]:
+          - strong [ref=e135]: Table 9
+          - generic [ref=e136]: 0 / 0 réussites
+          - generic [ref=e138]: 0% de maîtrise
+    - generic [ref=e139]:
+      - generic [ref=e141]:
+        - heading "Progression jour par jour" [level=2] [ref=e142]
+        - paragraph [ref=e143]: Historique local des séances pour visualiser le rythme et la régularité.
+      - paragraph [ref=e145]: Aucune séance enregistrée pour le moment.
+  - status

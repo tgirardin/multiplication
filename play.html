@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MÉMOx9 — Jeu</title>
+    <script src="boot.js"></script>
+  </head>
+  <body data-page="play">
+    <main class="play-shell">
+      <div class="play-version" id="version-badge" aria-label="Version de l'application"></div>
+
+      <section class="play-card" id="play-card">
+        <header class="play-topbar">
+          <div>
+            <p class="play-kicker" id="play-mode-label">Séance prête</p>
+            <h1 class="play-title" id="play-title">Le jeu va démarrer.</h1>
+            <p class="play-subtitle" id="play-subtitle">Les réponses apparaîtront ici après le délai choisi.</p>
+          </div>
+          <div class="play-actions-top">
+            <div class="play-progress-copy" id="progress-label">0 / 0</div>
+            <div class="progress-track play-progress-track">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <button class="ghost compact" id="close-btn" type="button">Fermer</button>
+          </div>
+        </header>
+
+        <div class="timer play-timer">
+          <div class="timer-bar" id="timer-bar"></div>
+        </div>
+
+        <section class="question-card" id="question-card">
+          <p class="play-question-meta" id="session-meta">Préparation de la séance...</p>
+          <div class="play-question" id="question">—</div>
+          <p class="choice-stage" id="choice-stage">Les réponses apparaîtront ici.</p>
+          <div class="choices play-choices" id="choices" aria-label="Choix multiples"></div>
+          <p class="feedback play-feedback" id="feedback"></p>
+        </section>
+
+        <section class="play-finish" id="finish-card" hidden>
+          <p class="play-kicker">Séance terminée</p>
+          <h2 class="finish-title">Bilan rapide</h2>
+          <div class="summary-metrics compact-summary">
+            <article class="summary-metric">
+              <span class="metric-label">Score</span>
+              <strong id="summary-score">0 / 0</strong>
+            </article>
+            <article class="summary-metric">
+              <span class="metric-label">Exactitude</span>
+              <strong id="summary-accuracy">0%</strong>
+            </article>
+            <article class="summary-metric">
+              <span class="metric-label">Meilleure série</span>
+              <strong id="summary-best-streak">0</strong>
+            </article>
+          </div>
+          <p class="summary-weak" id="summary-weak">Tables à renforcer: —</p>
+          <p class="summary-reco" id="summary-reco">Conseil: —</p>
+          <div class="finish-actions">
+            <button class="primary" id="retry-btn" type="button">Refaire cette séance</button>
+            <button class="secondary" id="retry-targeted-btn" type="button">Révision ciblée</button>
+            <button class="ghost" id="back-home-btn" type="button">Voir l'accueil</button>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
