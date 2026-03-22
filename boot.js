@@ -1,10 +1,23 @@
+const VERSION_BUILD = "2026-03-22T06:24";
+
+function createVersionToken(build) {
+  const compact = build.replace(/[^0-9]/g, "");
+  return `${compact.slice(0, 8)}-${compact.slice(8, 12)}`;
+}
+
 window.MEMOX9_VERSION = {
-  label: "21-03-2026 02:39",
-  token: "20260321-0239",
+  build: VERSION_BUILD,
+  label: VERSION_BUILD.replace("T", " "),
+  token: createVersionToken(VERSION_BUILD),
 };
 
 (function loadMemox9Assets() {
   const { token } = window.MEMOX9_VERSION;
+  const scripts = [
+    { key: "storage", src: "safe-storage.js" },
+    { key: "core", src: "game-core.js" },
+    { key: "app", src: "app.js" },
+  ];
 
   if (!document.querySelector('link[data-memox9="styles"]')) {
     const stylesheet = document.createElement("link");
@@ -14,11 +27,15 @@ window.MEMOX9_VERSION = {
     document.head.appendChild(stylesheet);
   }
 
-  if (!document.querySelector('script[data-memox9="app"]')) {
-    const appScript = document.createElement("script");
-    appScript.src = `app.js?v=${token}`;
-    appScript.defer = true;
-    appScript.dataset.memox9 = "app";
-    document.head.appendChild(appScript);
-  }
+  scripts.forEach(({ key, src }) => {
+    if (document.querySelector(`script[data-memox9="${key}"]`)) {
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = `${src}?v=${token}`;
+    script.defer = true;
+    script.dataset.memox9 = key;
+    document.head.appendChild(script);
+  });
 })();

@@ -1,0 +1,202 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - strong [ref=e4]: MÉMOx9
+      - generic [ref=e5]: QCM tables 1 à 9
+    - main [ref=e6]:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - heading [level=1]: Préparer la séance
+              - paragraph: Réglages compacts, puis passage fluide vers le jeu.
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=2]: Réglages
+                - generic:
+                  - button: "?"
+                  - generic: Sur Mac, privilégie des séances courtes et un délai discret pour garder tout visible. Sur téléphone, baisse le nombre de questions et garde un peu plus de temps total.
+              - generic:
+                - generic:
+                  - generic: Mode
+                  - generic:
+                    - button: "?"
+                    - generic: Choix multiple utilise les tables cochées. Révision ciblée sélectionne automatiquement les 2 tables les plus fragiles.
+                - generic:
+                  - generic:
+                    - radio [checked]
+                    - generic: Choix multiple
+                  - generic:
+                    - radio
+                    - generic: Révision ciblée
+              - generic:
+                - generic:
+                  - generic: Questions
+                  - generic:
+                    - button: "?"
+                    - generic: 10 à 14 pour une série rapide. 15 à 20 pour une séance solide. Au-delà, la partie devient plus longue et plus dense.
+                - generic:
+                  - slider: "16"
+                  - generic: "16"
+              - generic:
+                - generic:
+                  - generic: Délai avant choix
+                  - generic:
+                    - button: "?"
+                    - generic: Le chronomètre démarre tout de suite. Ce délai laisse un temps de calcul mental avant l'apparition des réponses.
+                - generic:
+                  - slider: "2"
+                  - generic: 2 s
+              - generic:
+                - generic:
+                  - generic: Temps total
+                  - generic:
+                    - button: "?"
+                    - generic: Ce temps inclut la réflexion puis le clic. Garde toujours au moins 2 secondes de plus que le délai avant choix.
+                - generic:
+                  - slider: "7"
+                  - generic: 7 s
+            - generic:
+              - generic:
+                - heading [level=2]: Tables
+                - generic:
+                  - button: "?"
+                  - generic: En mode classique, coche 3 à 5 tables pour garder des séries rapides et lisibles. En mode ciblé, cette zone devient seulement informative.
+              - group:
+                - button: Table 1
+                - button: Table 2
+                - button: Table 3
+                - button: Table 4
+                - button: Table 5
+                - button: Table 6
+                - button: Table 7
+                - button: Table 8
+                - button: Table 9
+              - generic:
+                - button: Tout
+                - button: Aucun
+                - button: 2-6
+              - paragraph: "Tables actives: 2, 3, 4, 5, 6."
+          - generic:
+            - paragraph: La séance s'ouvrira directement sur le jeu.
+            - generic:
+              - button [active]: Lancer la séance
+              - button: Réinitialiser les progrès
+      - generic [ref=e83]:
+        - generic [ref=e84]:
+          - generic [ref=e85]:
+            - paragraph [ref=e86]: Choix multiple • tables 2, 3, 4, 5, 6
+            - paragraph [ref=e87]: Question 2 sur 16 • Série 0
+          - button "Arrêter" [ref=e88] [cursor=pointer]
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - generic [ref=e91]: Progression
+            - strong [ref=e92]: 2 / 16
+          - generic [ref=e94]: Avancement de la séance
+        - generic [ref=e96]:
+          - generic [ref=e97]:
+            - generic [ref=e98]: 6 × 5 = ?
+            - paragraph [ref=e99]: Cherche mentalement la réponse pendant 2 secondes, puis laisse les cartes se retourner.
+          - generic [ref=e100]:
+            - generic [ref=e102]: Temps restant pour répondre
+            - generic "Choix multiples" [ref=e105]:
+              - button "?" [disabled] [ref=e124]:
+                - generic [ref=e127]: "?"
+              - button "?" [disabled] [ref=e128]:
+                - generic [ref=e131]: "?"
+              - button "?" [disabled] [ref=e132]:
+                - generic [ref=e135]: "?"
+              - button "?" [disabled] [ref=e136]:
+                - generic [ref=e139]: "?"
+          - paragraph [ref=e122]
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=1]: Résultats
+                - paragraph: Lance une séance pour obtenir un bilan détaillé.
+            - generic:
+              - article:
+                - generic: Score
+                - strong: 0 / 0
+              - article:
+                - generic: Exactitude
+                - strong: 0%
+              - article:
+                - generic: Meilleure série
+                - strong: "0"
+            - paragraph: "Tables à renforcer: —"
+            - paragraph: "Conseil: Lance une première série pour créer une base de progression."
+            - generic:
+              - button: Refaire la séance
+              - button: Révision ciblée
+              - button: Retour réglages
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=2]: Repères de progression
+                - paragraph: Vue d'ensemble des acquis et du dernier résultat, rangée ici après la partie.
+            - generic:
+              - article:
+                - generic: Maîtrise moyenne
+                - strong: 0%
+              - article:
+                - generic: Meilleure série
+                - strong: "0"
+              - article:
+                - generic: Dernière exactitude
+                - strong: 0%
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=2]: Maîtrise par table
+                - paragraph: Vue détaillée des acquis après la séance.
+            - generic:
+              - article:
+                - strong: Table 1
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 2
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 3
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 4
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 5
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 6
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 7
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 8
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+              - article:
+                - strong: Table 9
+                - generic: 0 / 0 réussites
+                - generic: 0% de maîtrise
+          - generic:
+            - generic:
+              - generic:
+                - heading [level=2]: Progression jour par jour
+                - paragraph: Historique local des séances avec au moins une réponse.
+            - generic:
+              - paragraph: Aucune séance enregistrée pour le moment.
+    - contentinfo [ref=e80]:
+      - generic "Version de l'application" [ref=e81]: v 2026-03-21 02:39
+  - status

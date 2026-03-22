@@ -1,0 +1,19 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic "Version de l'application"
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - paragraph [ref=e6]: Séance prête
+          - heading "Le jeu va démarrer." [level=1] [ref=e7]
+          - paragraph [ref=e8]: Les réponses apparaîtront ici après le délai choisi.
+        - generic [ref=e9]:
+          - generic [ref=e10]: 0 / 0
+          - button "Fermer" [ref=e13] [cursor=pointer]
+      - generic [ref=e16]:
+        - paragraph [ref=e17]: Préparation de la séance...
+        - generic [ref=e18]: —
+        - paragraph [ref=e19]: Les réponses apparaîtront ici.
+        - generic "Choix multiples"
+        - paragraph [ref=e20]
+  - status
